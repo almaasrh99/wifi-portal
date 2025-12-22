@@ -147,15 +147,6 @@ require_once "../middleware/auth.php";
 
 </script>
 
-<script>
 
-    if (data.status === "success") {
-  setTimeout(() => {
-    window.location.href = "dashboard/index.php";
-  }, 1500);
-}
-
-   
-</script>
 
 </html>

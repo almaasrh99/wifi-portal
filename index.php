@@ -279,7 +279,7 @@
                 <button
                   id="toggleForm"
                   type="button"
-                  class="text-secondary font-semibold hover:underline"
+                  class="text-secondary cursor-pointer font-semibold hover:underline"
                 >
                   Klik disini untuk register
                 </button>

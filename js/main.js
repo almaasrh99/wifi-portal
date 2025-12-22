@@ -383,6 +383,7 @@ contacts.forEach((item) => {
 
 let isRegister = false;
 
+// Seleksi Elemen DOM
 const formTitle = document.getElementById("formTitle");
 const formDesc = document.getElementById("formDesc");
 const registerFields = document.getElementById("registerFields");
@@ -393,13 +394,13 @@ const toggleForm = document.getElementById("toggleForm");
 const loginNonMemberText = document.getElementById("loginNonMemberText");
 const formMode = document.getElementById("formMode");
 
+// Fungsi Toggle Mode (Login/Register)
 toggleForm.addEventListener("click", () => {
   isRegister = !isRegister;
 
   if (isRegister) {
     // ===== REGISTER MODE =====
     if (formMode) formMode.value = "register";
-
     formTitle.textContent = "Register";
     formDesc.textContent =
       "Mohon lengkapi form dibawah agar kamu dapat mengakses internet kami.";
@@ -410,12 +411,10 @@ toggleForm.addEventListener("click", () => {
 
     submitBtn.textContent = "Register";
     toggleForm.textContent = "Klik disini untuk login member";
-
     loginNonMemberText.classList.add("hidden");
   } else {
     // ===== LOGIN MODE =====
     if (formMode) formMode.value = "login";
-
     formTitle.textContent = "Login Member";
     formDesc.textContent =
       "Mohon gunakan nomor WhatsApp anda ketika mendaftar aplikasi member CRM Club.";
@@ -426,25 +425,24 @@ toggleForm.addEventListener("click", () => {
 
     submitBtn.textContent = "Login";
     toggleForm.textContent = "Klik disini untuk register";
-
     loginNonMemberText.classList.remove("hidden");
   }
 });
 
-// ===== Toast Show =====
-
+// ===== Form Handling & Toast =====
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("authForm");
+  const toast = document.getElementById("toast");
+  const msg = document.getElementById("toastMessage");
+
   if (!form) {
     console.error("Form authForm tidak ditemukan");
     return;
   }
 
-  function showToast(message, type = "success") {
-    const toast = document.getElementById("toast");
-    const msg = document.getElementById("toastMessage");
-
-    // reset state
+  // Fungsi untuk menampilkan Toast
+  const showToast = (message, type = "success") => {
+    // Reset state toast
     toast.classList.remove(
       "bg-green-600",
       "bg-red-600",
@@ -453,41 +451,49 @@ document.addEventListener("DOMContentLoaded", () => {
       "pointer-events-none"
     );
 
+    // Tambah style berdasarkan tipe
     toast.classList.add(type === "success" ? "bg-green-600" : "bg-red-600");
-
     msg.innerText = message;
 
+    // Trigger animasi masuk
     requestAnimationFrame(() => {
       toast.classList.add("opacity-100", "translate-x-0");
     });
 
+    // Trigger animasi keluar
     setTimeout(() => {
       toast.classList.remove("opacity-100", "translate-x-0");
       toast.classList.add("opacity-0", "translate-x-12", "pointer-events-none");
     }, 2800);
-  }
+  };
 
+  // Event Listener Submit Form
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const formData = new FormData(form);
 
     try {
       const res = await fetch(form.action, {
         method: "POST",
         body: formData,
-        credentials: "same-origin", // 🔥 KUNCI SESSION
+        credentials: "include", // penting untuk session cookie
       });
 
       const data = await res.json();
-
       showToast(data.message, data.status);
 
-      // 🔥 AUTO REDIRECT (LOGIN & REGISTER)
-      if (data.status === "success" && data.redirect) {
+      function getProjectBase() {
+        // contoh pathname: /wifi-login/auth/index.php  -> base: /wifi-login
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        return parts.length ? `/${parts[0]}` : "";
+      }
+
+      if (data.status === "success") {
+        const target =
+          data.redirect || `${getProjectBase()}/dashboard/index.php`;
         setTimeout(() => {
-          window.location.href = data.redirect;
-        }, 1500);
+          window.location.href = target;
+        }, 800);
       }
     } catch (err) {
       showToast("Terjadi kesalahan server", "error");
