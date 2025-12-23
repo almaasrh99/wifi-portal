@@ -73,6 +73,11 @@ if (!$phone || !$password) {
   response("error", "Nomor HP dan password wajib diisi!");
 }
 
+// 62 + 8-11 digit => total 10-13 digit
+if (!preg_match('/^62[0-9]{8,11}$/', $phone)) {
+  response("error", "Nomor HP harus diawali 62 dan terdiri dari 10–13 digit!");
+}
+
 $result = mysqli_query($conn, "SELECT * FROM users WHERE phone='$phone' LIMIT 1");
 if (mysqli_num_rows($result) === 0) {
   response("error", "Akun tidak ditemukan!");
