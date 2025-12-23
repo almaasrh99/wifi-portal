@@ -482,7 +482,7 @@
                 data-aos-easing="ease-out-cubic"
                 class="flex flex-col gap-4"
               >
-                <div id="contactList" class="space-y-6"></div>
+                <div id="contactList" class="space-y-6 text-left"></div>
               </div>
             </div>
           </div>

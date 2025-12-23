@@ -364,7 +364,7 @@ contacts.forEach((item) => {
         </div>
       </div>
 
-      <div class="text-gray-700 text-sm md:text-lg leading-relaxed">
+      <div class="text-gray-700 text-sm text-left md:text-lg leading-relaxed">
         ${
           item.link
             ? `<a href="${item.link}" target="_blank" class="hover:underline">

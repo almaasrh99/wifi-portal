@@ -23,6 +23,7 @@ if (!isset($_SESSION["user_id"])) {
   }
 
   // 🔥 JIKA PAGE LOAD → REDIRECT
-  header("Location: /index.php?auth=required");
+  $base = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+  header("Location: $base/index.php?auth=required");
   exit;
 }
