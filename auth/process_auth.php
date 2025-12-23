@@ -90,8 +90,9 @@ $_SESSION["fullname"] = $user["name"];
 $_SESSION["email"]    = $user["email"];
 $_SESSION["phone"]    = $user["phone"];
 
-// Mengatur locale ke Indonesia (ID)
+// Mengatur timezone ke Asia/Jakarta
 date_default_timezone_set('Asia/Jakarta');
+
 $months = [
   1 => 'Januari',
   'Februari',
@@ -106,12 +107,17 @@ $months = [
   'November',
   'Desember'
 ];
+
 $now = time();
+
 $d = date('d', $now);
 $m = $months[(int)date('m', $now)];
 $y = date('Y', $now);
 $t = date('H:i', $now);
+
+// Gabungkan dan simpan ke session
 $_SESSION["last_login"] = "$d $m $y $t";
+
 
 session_write_close();
 $base = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');

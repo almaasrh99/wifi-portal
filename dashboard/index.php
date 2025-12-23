@@ -37,13 +37,13 @@ require_once "../middleware/auth.php";
   <div class="fixed inset-0 -z-10 bg-[url(../assets/bg-theme.png)] bg-bottom bg-cover"></div>
 
   <div class="min-h-screen flex items-center justify-center">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto p-4 md:p-8 lg:p-12 xl:p-16 2xl:p-24">
       <div class="flex flex-col justify-center items-center p-6 gap-4 bg-white rounded-lg shadow-[0px_0px_8px_0px_rgba(60,60,60,0.25)]">
         <div class="flex py-4 flex-col md:flex-row md:justify-between items-center w-full">
           <div class="flex items-center justify-center gap-2">
             <img src="../assets/logo.png" alt="logo" class="w-12 md:w-16">
-            <div class="flex flex-col gap-0 md:gap-2">
-              <h1 class="text-lg md:text-xl font-bold text-primary">CRM Club Hotspot</h1>
+            <div class="flex flex-col gap-0 md:gap-1">
+              <h1 class="text-lg md:text-xl lg:text-2xl font-bold text-primary">CRM Club Hotspot</h1>
               <div class="flex gap-1">
                 <p class="text-[10px] md:text-base text-gray-500">Terhubung sebagai member </p><span class="text-[10px] md:text-base text-gray-500"> • Kelola Kuota dan Koneksi</span>
 
@@ -51,16 +51,19 @@ require_once "../middleware/auth.php";
 
             </div>
           </div>
+
           <div>
             <p class="hidden md:block text-xs md:text-sm text-gray-800 font-semibold italic">Login : <span><?= $_SESSION["last_login"]; ?></span>
           </div>
 
+
         </div>
+        <div class="w-full mb-4 md:mb-8 border-t border-gray-200"></div>
         <div class="w-full grid grid-cols-1 md:grid-cols-3 items-center gap-4">
           <!-- COL 1: Profile -->
           <div class="flex items-center gap-3">
             <div
-              class="w-16 h-16 md:w-20 md:h-20 rounded-sm shadow-lg flex items-center justify-center
+              class="w-16 h-16 md:w-18 md:h-18 rounded-sm shadow-lg flex items-center justify-center
              text-white text-xl font-bold bg-gradient-to-r from-sky-500 to-sky-700">
               <span id="user-initials" class="text-xl md:text-2xl"></span>
             </div>
@@ -68,7 +71,7 @@ require_once "../middleware/auth.php";
             <div class="flex flex-col gap-1">
               <p class="block md:hidden text-xs md:text-sm text-gray-800 font-semibold italic">Login : <span><?= $_SESSION["last_login"]; ?></span>
               <h1 class="text-xl font-bold text-black"><?= $_SESSION["fullname"]; ?></h1>
-              <p class="text-sm text-gray-500">+<?= $_SESSION["phone"]; ?></p>
+              <p class="text-sm md:text-base lg:text-lg text-gray-500">+<?= $_SESSION["phone"]; ?></p>
             </div>
           </div>
 
@@ -154,111 +157,11 @@ require_once "../middleware/auth.php";
         </div>
       </div>
 
-      <script>
-        function showLogoutModal() {
-          document.getElementById('logoutModal').classList.remove('hidden');
-        }
-
-        function closeLogoutModal() {
-          document.getElementById('logoutModal').classList.add('hidden');
-        }
-
-        async function logout() {
-          try {
-            const res = await fetch("../auth/logout.php", {
-              method: "POST",
-              headers: {
-                "Accept": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
-              }
-            });
-
-            const data = await res.json();
-            showToast(data.message, data.status);
-
-            if (data.status === "success") {
-              setTimeout(() => {
-                window.location.href = "../index.php";
-              }, 1500);
-            }
-          } catch (err) {
-            console.error(err);
-            showToast("Gagal logout", "error");
-          }
-          closeLogoutModal();
-        }
-
-        function showToast(message, type = "success") {
-          const toast = document.getElementById("toast");
-          const msg = document.getElementById("toastMessage");
-
-          toast.classList.remove(
-            "bg-green-600",
-            "bg-red-600",
-            "opacity-0",
-            "translate-x-12",
-            "pointer-events-none"
-          );
-
-          toast.classList.add(type === "success" ? "bg-green-600" : "bg-red-600");
-          msg.textContent = message;
-
-          requestAnimationFrame(() => {
-            toast.classList.add("opacity-100", "translate-x-0");
-          });
-
-          setTimeout(() => {
-            toast.classList.remove("opacity-100", "translate-x-0");
-            toast.classList.add("opacity-0", "translate-x-12", "pointer-events-none");
-          }, 2800);
-        }
-      </script>
-
       <div id="toast" class="fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-4 rounded-xl text-white shadow-lg opacity-0 translate-x-12 pointer-events-none transition-all duration-500 ease-out">
         <span id="toastMessage"></span>
       </div>
 </body>
-<script>
-  const contacts = [{
-      icon: "../assets/icons/mail.svg",
-      text: "support@mikrotik.id",
-      link: "mailto:support@mikrotik.id",
-    },
-    {
-      icon: "../assets/icons/phone.svg",
-      text: "+628871189999",
-      link: "https://wa.me/628871189999",
-    }
 
-  ];
-
-  const contactList = document.getElementById("contactList");
-
-  contacts.forEach((item) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "flex items-center gap-4";
-
-    const content = `
-      <div class="flex-shrink-0">
-        <div class="flex items-center justify-center">
-          <img src="${item.icon}" alt="" class="w-10 md:w-12 " />
-        </div>
-      </div>
-
-      <div class="text-gray-700 text-sm text-left md:text-lg leading-relaxed">
-        ${
-          item.link
-            ? `<a href="${item.link}" target="_blank" class="hover:underline">
-              ${item.text}
-            </a>`
-            : `<p>${item.text}</p>`
-        }
-      </div>
-    `;
-
-    wrapper.innerHTML = content;
-    contactList.appendChild(wrapper);
-  });
-</script>
+<script src="../js/dashboard.js"></script>
 
 </html>
