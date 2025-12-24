@@ -467,35 +467,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2800);
   };
 
+  const loader = document.getElementById("loaderOverlay");
+
   // Event Listener Submit Form
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Show Loader
+    if (loader) loader.classList.remove("hidden");
+
     const formData = new FormData(form);
 
     try {
       const res = await fetch(form.action, {
         method: "POST",
         body: formData,
-        credentials: "include", // penting untuk session cookie
+        credentials: "include",
       });
 
       const data = await res.json();
-      showToast(data.message, data.status);
 
-      function getProjectBase() {
-        // contoh pathname: /wifi-login/auth/index.php  -> base: /wifi-login
-        const parts = window.location.pathname.split("/").filter(Boolean);
-        return parts.length ? `/${parts[0]}` : "";
-      }
+      // Hide Loader with delay to ensure visibility
+      setTimeout(() => {
+        if (loader) loader.classList.add("hidden");
+        showToast(data.message, data.status);
 
-      if (data.status === "success") {
-        const target =
-          data.redirect || `${getProjectBase()}/dashboard/index.php`;
-        setTimeout(() => {
-          window.location.href = target;
-        }, 800);
-      }
+        function getProjectBase() {
+          const parts = window.location.pathname.split("/").filter(Boolean);
+          return parts.length ? `/${parts[0]}` : "";
+        }
+
+        if (data.status === "success") {
+          const target =
+            data.redirect || `${getProjectBase()}/dashboard/index.php`;
+          setTimeout(() => {
+            window.location.href = target;
+          }, 800);
+        }
+      }, 500);
     } catch (err) {
+      // Hide Loader on error
+      if (loader) loader.classList.add("hidden");
       showToast("Terjadi kesalahan server", "error");
     }
   });

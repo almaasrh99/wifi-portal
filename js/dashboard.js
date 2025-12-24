@@ -7,7 +7,10 @@ function closeLogoutModal() {
 }
 
 async function logout() {
+  const loader = document.getElementById("loaderOverlay");
   try {
+    if (loader) loader.classList.remove("hidden");
+
     const res = await fetch("../auth/logout.php", {
       method: "POST",
       headers: {
@@ -17,14 +20,20 @@ async function logout() {
     });
 
     const data = await res.json();
-    showToast(data.message, data.status);
 
-    if (data.status === "success") {
-      setTimeout(() => {
-        window.location.href = "../index.php";
-      }, 1500);
-    }
+    // Slight delay to ensure loader is seen
+    setTimeout(() => {
+      if (loader) loader.classList.add("hidden");
+      showToast(data.message, data.status);
+
+      if (data.status === "success") {
+        setTimeout(() => {
+          window.location.href = "../index.php";
+        }, 1500);
+      }
+    }, 500);
   } catch (err) {
+    if (loader) loader.classList.add("hidden");
     console.error(err);
     showToast("Gagal logout", "error");
   }

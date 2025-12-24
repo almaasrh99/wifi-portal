@@ -62,7 +62,12 @@ if ($mode === "register") {
   $_SESSION["phone"]    = $phone;
   $_SESSION["last_login"] = date('Y-m-d H:i:s');
 
-  response("success", "Register berhasil! Mengalihkan ke dashboard...");
+  $base = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+
+  response("success", "Register berhasil! Mengalihkan ke dashboard...", [
+    "redirect" => $base . "/dashboard/index.php"
+  ]);
+  exit;
 }
 
 /* ================= LOGIN ================= */

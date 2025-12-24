@@ -160,8 +160,21 @@ require_once "../middleware/auth.php";
       <div id="toast" class="fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-4 rounded-xl text-white shadow-lg opacity-0 translate-x-12 pointer-events-none transition-all duration-500 ease-out">
         <span id="toastMessage"></span>
       </div>
+      <div id="loaderOverlay" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+        <div class="flex flex-col items-center gap-4">
+          <div
+            class="relative h-12 w-12 animate-spin rounded-full
+         bg-[conic-gradient(from_0deg,#CD4B3A,#FAE5B7,#CD4B3A)]">
+            <div
+              class="absolute inset-1 rounded-full bg-black/60 backdrop-blur-sm">
+            </div>
+          </div>
+
+          <p class="text-white font-semibold text-lg animate-pulse">Memproses...</p>
+        </div>
+      </div>
 </body>
 
-<script src="../js/dashboard.js"></script>
+<script src="../js/dashboard.js?v=<?php echo time(); ?>"></script>
 
 </html>
